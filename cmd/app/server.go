@@ -11,10 +11,12 @@ type Server struct {
 	http.Server
 }
 
-func New() Server {
+var ServiceName = ""
+
+func New(port string) Server {
 	return Server{
 		http.Server{
-			Addr:         "127.0.0.1:8080",
+			Addr:         ":" + port,
 			ReadTimeout:  10 * time.Second,
 			WriteTimeout: 10 * time.Second,
 		},
