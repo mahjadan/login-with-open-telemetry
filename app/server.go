@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/mahjadan/login-with-open-telemetry/cmd/handle"
+	"github.com/mahjadan/login-with-open-telemetry/app/handle"
 	"net/http"
 	"time"
 )

@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3'
 services:
   jaeger:
     image: jaegertracing/all-in-one:latest
@@ -8,10 +8,11 @@ services:
     networks:
       - jaeger-example
 
-  login-service:
+  go-client:
+    container_name: go-client
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: cmd/client/Dockerfile
     ports:
       - "8080:8080"
     environment:
@@ -20,6 +21,21 @@ services:
       - OTEL_EXPORTER_JAEGER_AGENT_PORT=6831
     depends_on:
       - jaeger
+    networks:
+      - jaeger-example
+
+  go-server:
+    container_name: go-server
+    build:
+      context: .
+      dockerfile: cmd/server/Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - LOGIN_URL=http://go-client:8080/login
+      - REGISTER_URL=http://go-client:8080/register
+      - OTEL_EXPORTER_JAEGER_AGENT_HOST=jaeger
+      - OTEL_EXPORTER_JAEGER_AGENT_PORT=6831
     networks:
       - jaeger-example
 

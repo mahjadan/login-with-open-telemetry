@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"github.com/gorilla/mux"
-	"github.com/mahjadan/login-with-open-telemetry/cmd/app"
-	"github.com/mahjadan/login-with-open-telemetry/cmd/handle"
-	"github.com/mahjadan/login-with-open-telemetry/cmd/trace"
+	"github.com/mahjadan/login-with-open-telemetry/app"
+	"github.com/mahjadan/login-with-open-telemetry/app/handle"
+	"github.com/mahjadan/login-with-open-telemetry/app/trace"
 	"github.com/mahjadan/login-with-open-telemetry/pkg/repository"
 	"github.com/mahjadan/login-with-open-telemetry/pkg/service"
 	"github.com/mahjadan/login-with-open-telemetry/pkg/token"
