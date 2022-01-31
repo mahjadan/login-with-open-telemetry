@@ -1,6 +1,7 @@
 package trace
 
 import (
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
@@ -8,6 +9,7 @@ import (
 	"go.opentelemetry.io/otel/sdk/trace"
 	"go.opentelemetry.io/otel/semconv/v1.7.0"
 	"io"
+	"net/http"
 )
 
 func NewJaegerExporterGrpc() (trace.SpanExporter, error) {
@@ -21,6 +23,12 @@ func NewJaegerExporterGrpc() (trace.SpanExporter, error) {
 	return exp, nil
 }
 
+func HTTPClientWithTrace() *http.Client {
+	client := http.DefaultClient
+	transport := otelhttp.NewTransport(client.Transport)
+	client.Transport = transport
+	return client
+}
 func NewJaegerExporterHttp(url string) (trace.SpanExporter, error) {
 	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
 	if err != nil {

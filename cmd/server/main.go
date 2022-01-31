@@ -37,12 +37,15 @@ func main() {
 	}()
 	otel.SetTracerProvider(tp)
 
+	// config httpclient with tracing
+	client := trace.HTTPClientWithTrace()
+
 	log.Println("this is SERVER")
 	router := mux.NewRouter()
 	router.HandleFunc("/login_test", func(writer http.ResponseWriter, request *http.Request) {
+
 		b := `{ "username": "test1@gmail.com", "password": "123123"}`
-		log.Println("going to call ", os.Getenv("LOGIN_URL"))
-		resp, err2 := http.DefaultClient.Post(os.Getenv("LOGIN_URL"), "application/json", bytes.NewBuffer([]byte(b)))
+		resp, err2 := client.Post(os.Getenv("LOGIN_URL"), "application/json", bytes.NewBuffer([]byte(b)))
 		if err2 != nil {
 			log.Println(err2)
 			writer.WriteHeader(http.StatusBadRequest)
@@ -65,8 +68,7 @@ func main() {
 	router.HandleFunc("/register_test", func(writer http.ResponseWriter, request *http.Request) {
 		b := `{ "username": "test1@gmail.com", "password": "123123"}`
 
-		log.Println("going to call ", os.Getenv("REGISTER_URL"))
-		resp, err2 := http.DefaultClient.Post(os.Getenv("REGISTER_URL"), "application/json", bytes.NewBuffer([]byte(b)))
+		resp, err2 := client.Post(os.Getenv("REGISTER_URL"), "application/json", bytes.NewBuffer([]byte(b)))
 		if err2 != nil {
 			log.Println(err2)
 			writer.WriteHeader(http.StatusBadRequest)
