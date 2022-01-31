@@ -16,3 +16,6 @@ this will run both the apps with a jaeger container to receive the traces and vi
 
 `curl http://localhost:8081/login_test`
 
+### Access Tracing:
+
+http://localhost:16686/
